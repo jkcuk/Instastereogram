@@ -94,7 +94,7 @@ export function createGuiWindow({
         document.createElement("span");
 
     title.textContent =
-        "Controls";
+        "Settings";
 
     const dragHandle =
         document.createElement("span");

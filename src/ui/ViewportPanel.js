@@ -162,10 +162,15 @@ export function createViewportPanel({
             },
             requestRender
         );
-        
+    
+    const row = document.createElement( "div" );
+    row.style.display = "flex";
+    row.style.gap = "6px";
+    row.style.alignItems = "center";
+
     createButton(
-        viewportGroup,
-        "Reset View",
+        row,
+        "Reset view",
         () => {
 
             camera.reset(
@@ -178,10 +183,12 @@ export function createViewportPanel({
     );
 
     createButton(
-        viewportGroup,
-        "Toggle Full Screen",
+        row,
+        "Toggle full screen",
         toggleFullscreen
     );
+
+    viewportGroup.appendChild( row );
 
     return {
         centreXSlider,

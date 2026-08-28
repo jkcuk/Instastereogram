@@ -14,7 +14,7 @@ export class RDASRenderer {
     maxDots = 200000; // Maximum number of dots
     dots = 0;
     maxClans = 20000; // Maximum number of clans (i.e. parent dots) to be drawn
-    blobSigma = 1; // Gaussian width of Gaussian-shaped dots ("blobs")
+    dotSigma = 1; // Gaussian width of Gaussian-shaped dots
     fadeFactor = 0.9;
     minBrightness = 0.2;
     alreadyThereThreshold = 250; // threshold for determining if a dot is already there (in the range [0, 1])
@@ -106,19 +106,19 @@ export class RDASRenderer {
             if(this.debug) console.log("Skipping bairn dot at ("+this.screen.h2i(screenHit.h)+", "+this.screen.v2j(screenHit.v)+") because of obstruction");
             return; // There is an intersection with the scene before reaching the eye
         }
-        // check if there is already a blob there
+        // check if there is already a dot there
         if (
             this.screen.getRGBComponent(screenHit.h, screenHit.v, rgbComponentIndex) 
             >=
             255*brightness*this.alreadyThereThreshold
             //this.alreadyThereThreshold // 255*this.minBrightness
         ) {
-            if(this.debug) console.log("Skipping bairn dot at ("+this.screen.h2i(screenHit.h)+", "+this.screen.v2j(screenHit.v)+") because there is already a blob there (brightness "+this.screen.getRGBComponent(screenHit.h, screenHit.v, rgbComponentIndex)+" >= "+255*brightness*this.alreadyThereThreshold+")");
-            return; // There is already a blob there (brightness > this.alreadyThereThreshold), so skip this bairn dot
+            if(this.debug) console.log("Skipping bairn dot at ("+this.screen.h2i(screenHit.h)+", "+this.screen.v2j(screenHit.v)+") because there is already a dot there (brightness "+this.screen.getRGBComponent(screenHit.h, screenHit.v, rgbComponentIndex)+" >= "+255*brightness*this.alreadyThereThreshold+")");
+            return; // There is already a dot there (brightness > this.alreadyThereThreshold), so skip this bairn dot
         }
         // Draw the bairn dot at the calculated position
-        // this.screen.placeDot(screenHit.h, screenHit.v, colour);
-        this.screen.placeBlob(screenHit.h, screenHit.v, rgbComponentIndex, brightness, this.blobSigma);
+        // this.screen.placeGaussianDot(screenHit.h, screenHit.v, colour);
+        this.screen.placeGaussianDot(screenHit.h, screenHit.v, rgbComponentIndex, brightness, this.dotSigma);
         this.dots++;
         this.addFamilyDots(
             screenHit.p, // position of parent dot
@@ -153,9 +153,9 @@ export class RDASRenderer {
             const rgbComponentIndex = Math.floor(Math.random() * 3); // 0 for red, 1 for green, 2 for blue
             // initial brightness of the dot
             const brightness = 1; // in the range [0, 1]
-            // this.screen.placeBlob(h, v, color, this.blobSigma);
-            this.screen.placeBlob(h, v, rgbComponentIndex, brightness, this.blobSigma);
-            // this.screen.placeDot(h, v, color);
+            // this.screen.placeGaussianDot(h, v, color, this.dotSigma);
+            this.screen.placeGaussianDot(h, v, rgbComponentIndex, brightness, this.dotSigma);
+            // this.screen.placeGaussianDot(h, v, color);
             if(this.debug) {
                 this.n = 0;
                 this.m = 0;

@@ -184,7 +184,7 @@ export function createCameraPanel({
 
             createButton(
                 stereoPairGroup,
-                "Delete stereo pair",
+                "Delete",
                 () => {
 
                     const idx =
@@ -213,7 +213,7 @@ export function createCameraPanel({
 
         createButton(
             stereoGroup,
-            "Add stereo pair",
+            "New stereo pair",
             () => {
 
                 const newStereoPair = {
@@ -269,14 +269,14 @@ export function createCameraPanel({
 
         createSlider(
             stereoGroup,
-            "Blob sigma",
+            "Dot sigma",
             0.1,
             5,
             0.1,
-            controls.rdasBlobSigma,
+            controls.rdasDotSigma,
             value => {
 
-                controls.rdasBlobSigma =
+                controls.rdasDotSigma =
                     value;
             },
             renderScene
@@ -284,16 +284,16 @@ export function createCameraPanel({
 
         createSlider(
             stereoGroup,
-            "Max blobs",
+            "Max no of dots",
             0,
             6,
             0.1,
             Math.log10(
-                controls.rdasMaxBlobs
+                controls.rdasMaxDots
             ),
             value => {
 
-                controls.rdasMaxBlobs =
+                controls.rdasMaxDots =
                     Math.pow(
                         10,
                         value
@@ -324,7 +324,7 @@ export function createCameraPanel({
 
         createSlider(
             stereoGroup,
-            "Max blob families",
+            "Max dot families",
             0,
             6,
             0.1,
@@ -379,7 +379,7 @@ export function createCameraPanel({
 
         createSlider(
             stereoGroup,
-            "Generation fade factor",
+            "Next-gen brightness factor",
             0,
             1,
             0.01,
@@ -409,7 +409,7 @@ export function createCameraPanel({
 
         createSlider(
             stereoGroup,
-            "Existing blob threshold",
+            "Existing dot threshold",
             0,
             1,  // 255,
             0.01,
@@ -435,16 +435,16 @@ export function createCameraPanel({
             rebuildGui
         );
 
-        createSwitch(
-            stereoGroup,
-            "Debug",
-            controls.debug,
-            value => {
-                controls.debug = value;
-            },
-            renderScene,
-            rebuildGui
-        );
+        // createSwitch(
+        //     stereoGroup,
+        //     "Debug",
+        //     controls.debug,
+        //     value => {
+        //         controls.debug = value;
+        //     },
+        //     renderScene,
+        //     rebuildGui
+        // );
 
     }
 }

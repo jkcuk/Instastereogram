@@ -149,8 +149,8 @@ export class RendererManager {
                 screen
             );
 
-        renderer.blobSigma = controls.rdasBlobSigma;
-        renderer.maxDots = controls.rdasMaxBlobs;
+        renderer.dotSigma = controls.rdasDotSigma;
+        renderer.maxDots = controls.rdasMaxDots;
         renderer.maxClans = controls.rdasMaxClans;
         renderer.maxRecursionDepth = controls.rdasMaxRecursionDepth;
         renderer.fadeFactor = controls.rdasFadeFactor;

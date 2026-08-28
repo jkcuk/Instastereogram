@@ -63,7 +63,7 @@ export class Screen {
         this.image.data[index + 2] = Math.round(Math.max(0, Math.min(1, color[2])) * 255);
         this.image.data[index + 3] = 255; // alpha channel
     }
-    placeBlob(
+    placeGaussianDot(
         h, v, 
         rgbComponentIndex, // 0 for red, 1 for green, 2 for blue
         brightness, // in the range [0, 1]

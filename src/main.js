@@ -79,8 +79,8 @@ const controls = {
     ],
     selectedStereoPairId: 1,
     useAllStereoPairs: false,
-    rdasBlobSigma: 1.5, // in pixel units
-    rdasMaxBlobs: 1000000,
+    rdasDotSigma: 1.5, // in pixel units
+    rdasMaxDots: 1000000,
     rdasMaxClans: 500,
     rdasMaxRecursionDepth: 200,
     rdasFadeFactor: 0.95,
@@ -853,24 +853,34 @@ function createGui() {
     root.style.display = "grid";
     root.style.gap = "12px";
 
-    const projectGroup =
-        createSection(
-            root,
-            "Project",
-            true
+    const row =
+        document.createElement(
+            "div"
         );
 
+    row.style.display =
+        "flex";
+
+    row.style.gap =
+        "6px";
+
+    row.style.alignItems =
+        "center";
+
+
     createButton(
-        projectGroup,
-        "Save project",
+        row,
+        "Save settings",
         () => persistence.save()
     );
 
     createButton(
-        projectGroup,
-        "Load project",
+        row,
+        "Load settings",
         () => persistence.createLoadButton()
     );
+
+    root.appendChild( row );
     
     createCameraPanel({
         root,
