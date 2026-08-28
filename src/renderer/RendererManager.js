@@ -156,6 +156,7 @@ export class RendererManager {
         renderer.fadeFactor = controls.rdasFadeFactor;
         renderer.minBrightness = controls.rdasMinBrightness;
         renderer.alreadyThereThreshold = controls.rdasAlreadyThereThreshold;
+        renderer.debug = controls.debug;
 
         renderer.render( scenes );
     }

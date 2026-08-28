@@ -9,6 +9,7 @@ import { createViewportPanel } from "./ui/ViewportPanel.js";
 import { createScenePanel } from "./ui/ScenePanel.js";
 import { createObjectPanel } from "./ui/ObjectPanel.js";
 import { createGuiWindow } from "./ui/GuiWindow.js";
+import { ProjectPersistence } from "./persistence/ProjectPersistence.js";
 import { createSlider, createButton, createSmallButton, createSelect, createSwitch, createSection } from "./ui/elements.js"
 const canvas = document.getElementById("canvas");
 canvas.style.touchAction = "none";
@@ -36,8 +37,12 @@ const nextStereoIdRef = {
     }
 };
 const meanIPD = 0.063; // mean interpupillar distance
-const angle1Deg = 45; // °
+
+// const angle1Deg = 45; // °
+const anglesDeg = [-30, 0, 30, 60]; // °
+
 const controls = {
+    debug: false,
     screenDistance: 0.5,
     screenWidth: 0.16, // 16cm wide screen
     renderer: "standard",
@@ -45,17 +50,31 @@ const controls = {
     stereoPairs: [
         {
             id: nextStereoId++,
-            name: "Interocular axis @0°",
+            name: "Interocular axis @" + anglesDeg[0] + "°",
             // eyeSeparation: meanIPD,
-            angle: 0, // horizontal
+            angle: anglesDeg[0] * Math.PI / 180, // angle w.r.t. horizontal
             sceneId: 1
         },
         {
             id: nextStereoId++,
-            name: "Interocular axis @" + angle1Deg + "°",
+            name: "Interocular axis @" + anglesDeg[1] + "°",
             // eyeSeparation: meanIPD,
-            angle: angle1Deg * Math.PI / 180, // angle w.r.t. horizontal
+            angle: anglesDeg[1] * Math.PI / 180, // angle w.r.t. horizontal
             sceneId: 2
+        },
+        {
+            id: nextStereoId++,
+            name: "Interocular axis @" + anglesDeg[2] + "°",
+            // eyeSeparation: meanIPD,
+            angle: anglesDeg[2] * Math.PI / 180, // angle w.r.t. horizontal
+            sceneId: 3
+        },
+        {
+            id: nextStereoId++,
+            name: "Interocular axis @" + anglesDeg[3] + "°",
+            // eyeSeparation: meanIPD,
+            angle: anglesDeg[3] * Math.PI / 180, // angle w.r.t. horizontal
+            sceneId: 4
         }
     ],
     selectedStereoPairId: 1,
@@ -97,43 +116,127 @@ const nextSceneIdRef = {
     }
 };
 
+// const scenes = [
+//     {
+//         id: nextSceneId++,
+//         name: "Scene 1",
+//         objects: [
+//             // {
+//             //     id: nextObjectId++,
+//             //     kind: "sphere",
+//             //     name: "Sphere",
+//             //     open: true,
+//             //     position: new Vector3(0, 0, -0.1),
+//             //     radius: 0.01,
+//             //     color: "#d9d9d9",
+//             //     material: "phong"
+//             // },
+//             {
+//                 id: nextObjectId++,
+//                 kind: "cylinder",
+//                 name: "Cylinder 1 @" + angle1Deg + "°",
+//                 open: true,
+//                 position: new Vector3(-0.04, 0, -0.1),
+//                 axis: new Vector3(Math.cos(angle1Deg * Math.PI / 180), Math.sin(angle1Deg * Math.PI / 180), 0),
+//                 radius: 0.01,
+//                 length: 1,
+//                 color: "#ff0000",
+//                 material: "phong"
+//             },
+//             {
+//                 id: nextObjectId++,
+//                 kind: "cylinder",
+//                 name: "Cylinder 2 @" + angle1Deg + "°",
+//                 open: true,
+//                 position: new Vector3(0.04, 0, -0.1),
+//                 axis: new Vector3(Math.cos(angle1Deg * Math.PI / 180), Math.sin(angle1Deg * Math.PI / 180), 0),
+//                 radius: 0.03,
+//                 length: 1,
+//                 color: "#4dff00",
+//                 material: "phong"
+//             },
+//             {
+//                 id: nextObjectId++,
+//                 kind: "plane",
+//                 name: "Invisible plane",
+//                 open: true,
+//                 position: new Vector3(0, 0, -0.12),
+//                 normal: new Vector3(0, 0, 1),
+//                 color: "#d9d9d9",
+//                 material: "dielectric",
+//                 ior: 1
+//             },
+//         ]
+//     },
+//     {
+//         id: nextSceneId++,
+//         name: "Scene 2",
+//         objects: [
+//             // {
+//             //     id: nextObjectId++,
+//             //     kind: "cylinder",
+//             //     name: "Cylinder 1",
+//             //     open: true,
+//             //     position: new Vector3(0, 0.03, -0.1),
+//             //     axis: new Vector3(1, 0, 0),
+//             //     radius: 0.01,
+//             //     length: 1,
+//             //     color: "#d9d9d9",
+//             //     material: "phong"
+//             // },
+//             {
+//                 id: nextObjectId++,
+//                 kind: "cylinder",
+//                 name: "Cylinder",   // "Cylinder 2",
+//                 open: true,
+//                 position: new Vector3(0, 0, -0.1),   // new Vector3(0, 0, -0.09),
+//                 axis: new Vector3(1, 0, 0),
+//                 radius: 0.02,
+//                 length: 1,
+//                 color: "#d9d9d9",
+//                 material: "phong"
+//             },
+//             // {
+//             //     id: nextObjectId++,
+//             //     kind: "cylinder",
+//             //     name: "Cylinder 3",
+//             //     open: true,
+//             //     position: new Vector3(0, -0.03, -0.08),
+//             //     axis: new Vector3(1, 0, 0),
+//             //     radius: 0.01,
+//             //     length: 1,
+//             //     color: "#d9d9d9",
+//             //     material: "phong"
+//             // },
+//             {
+//                 id: nextObjectId++,
+//                 kind: "plane",
+//                 name: "Invisible plane",
+//                 open: true,
+//                 position: new Vector3(0, 0, -0.12),
+//                 normal: new Vector3(0, 0, 1),
+//                 color: "#d9d9d9",
+//                 material: "dielectric",
+//                 ior: 1
+//             },
+//         ]
+//     }
+// ];
 const scenes = [
     {
         id: nextSceneId++,
         name: "Scene 1",
         objects: [
-            // {
-            //     id: nextObjectId++,
-            //     kind: "sphere",
-            //     name: "Sphere",
-            //     open: true,
-            //     position: new Vector3(0, 0, -0.1),
-            //     radius: 0.01,
-            //     color: "#d9d9d9",
-            //     material: "phong"
-            // },
             {
                 id: nextObjectId++,
                 kind: "cylinder",
-                name: "Cylinder 1 @" + angle1Deg + "°",
+                name: "Cylinder @" + anglesDeg[0] + "°",
                 open: true,
-                position: new Vector3(-0.04, 0, -0.1),
-                axis: new Vector3(Math.cos(angle1Deg * Math.PI / 180), Math.sin(angle1Deg * Math.PI / 180), 0),
-                radius: 0.01,
+                position: new Vector3(0, 0, -0.1),
+                axis: new Vector3(Math.cos(anglesDeg[0] * Math.PI / 180), Math.sin(anglesDeg[0] * Math.PI / 180), 0),
+                radius: 0.02,
                 length: 1,
                 color: "#ff0000",
-                material: "phong"
-            },
-            {
-                id: nextObjectId++,
-                kind: "cylinder",
-                name: "Cylinder 2 @" + angle1Deg + "°",
-                open: true,
-                position: new Vector3(0.04, 0, -0.1),
-                axis: new Vector3(Math.cos(angle1Deg * Math.PI / 180), Math.sin(angle1Deg * Math.PI / 180), 0),
-                radius: 0.03,
-                length: 1,
-                color: "#4dff00",
                 material: "phong"
             },
             {
@@ -153,42 +256,76 @@ const scenes = [
         id: nextSceneId++,
         name: "Scene 2",
         objects: [
-            // {
-            //     id: nextObjectId++,
-            //     kind: "cylinder",
-            //     name: "Cylinder 1",
-            //     open: true,
-            //     position: new Vector3(0, 0.03, -0.1),
-            //     axis: new Vector3(1, 0, 0),
-            //     radius: 0.01,
-            //     length: 1,
-            //     color: "#d9d9d9",
-            //     material: "phong"
-            // },
             {
                 id: nextObjectId++,
                 kind: "cylinder",
-                name: "Cylinder",   // "Cylinder 2",
+                name: "Cylinder @" + anglesDeg[1] + "°",
                 open: true,
-                position: new Vector3(0, 0, -0.1),   // new Vector3(0, 0, -0.09),
-                axis: new Vector3(1, 0, 0),
+                position: new Vector3(0, 0, -0.1),
+                axis: new Vector3(Math.cos(anglesDeg[1] * Math.PI / 180), Math.sin(anglesDeg[1] * Math.PI / 180), 0),
                 radius: 0.02,
                 length: 1,
-                color: "#d9d9d9",
+                color: "#4dff00",
                 material: "phong"
             },
-            // {
-            //     id: nextObjectId++,
-            //     kind: "cylinder",
-            //     name: "Cylinder 3",
-            //     open: true,
-            //     position: new Vector3(0, -0.03, -0.08),
-            //     axis: new Vector3(1, 0, 0),
-            //     radius: 0.01,
-            //     length: 1,
-            //     color: "#d9d9d9",
-            //     material: "phong"
-            // },
+            {
+                id: nextObjectId++,
+                kind: "plane",
+                name: "Invisible plane",
+                open: true,
+                position: new Vector3(0, 0, -0.12),
+                normal: new Vector3(0, 0, 1),
+                color: "#d9d9d9",
+                material: "dielectric",
+                ior: 1
+            },
+        ]
+    },
+    {
+        id: nextSceneId++,
+        name: "Scene 3",
+        objects: [
+            {
+                id: nextObjectId++,
+                kind: "cylinder",
+                name: "Cylinder @" + anglesDeg[2] + "°",
+                open: true,
+                position: new Vector3(0, 0, -0.1),
+                axis: new Vector3(Math.cos(anglesDeg[2] * Math.PI / 180), Math.sin(anglesDeg[2] * Math.PI / 180), 0),
+                radius: 0.02,
+                length: 1,
+                color: "#2600ff",
+                material: "phong"
+            },
+            {
+                id: nextObjectId++,
+                kind: "plane",
+                name: "Invisible plane",
+                open: true,
+                position: new Vector3(0, 0, -0.12),
+                normal: new Vector3(0, 0, 1),
+                color: "#d9d9d9",
+                material: "dielectric",
+                ior: 1
+            },
+        ]
+    },
+    {
+        id: nextSceneId++,
+        name: "Scene 4",
+        objects: [
+            {
+                id: nextObjectId++,
+                kind: "cylinder",
+                name: "Cylinder @" + anglesDeg[3] + "°",
+                open: true,
+                position: new Vector3(0, 0, -0.1),
+                axis: new Vector3(Math.cos(anglesDeg[3] * Math.PI / 180), Math.sin(anglesDeg[3] * Math.PI / 180), 0),
+                radius: 0.02,
+                length: 1,
+                color: "#2600ff",
+                material: "phong"
+            },
             {
                 id: nextObjectId++,
                 kind: "plane",
@@ -658,6 +795,34 @@ new InputController({
 //     }
 // );
 
+const persistence =
+    new ProjectPersistence({
+
+        controls,
+        scenes,
+        Vector3,
+
+        getNextIds: () => ({
+            nextStereoId,
+            nextSceneId,
+            nextObjectId
+        }),
+
+        setNextIds: ids => {
+
+            nextStereoId =
+                ids.nextStereoId;
+
+            nextSceneId =
+                ids.nextSceneId;
+
+            nextObjectId =
+                ids.nextObjectId;
+        },
+
+        rebuildGui,
+        renderScene
+    });
 
 // gui menu
 
@@ -687,6 +852,25 @@ function createGui() {
     root.style.padding = "14px";
     root.style.display = "grid";
     root.style.gap = "12px";
+
+    const projectGroup =
+        createSection(
+            root,
+            "Project",
+            true
+        );
+
+    createButton(
+        projectGroup,
+        "Save project",
+        () => persistence.save()
+    );
+
+    createButton(
+        projectGroup,
+        "Load project",
+        () => persistence.createLoadButton()
+    );
     
     createCameraPanel({
         root,

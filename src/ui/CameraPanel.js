@@ -87,7 +87,7 @@ export function createCameraPanel({
 
         createSelect(
             stereoGroup,
-            "Stereo preset",
+            "Stereo pair",
             options,
             String(
                 controls.stereoPairs
@@ -113,16 +113,16 @@ export function createCameraPanel({
 
         if (stereo) {
 
-            const presetGroup =
+            const stereoPairGroup =
                 createSection(
                     stereoGroup,
-                    "Stereo preset",
+                    "Stereo pair",
                     true
                 );
 
             // createTextInput(
-            //     presetGroup,
-            //     "Preset name",
+            //     stereoPairGroup,
+            //     "Stereo group name",
             //     stereo.name,
             //     value => {
 
@@ -132,7 +132,7 @@ export function createCameraPanel({
             // );
 
             createSlider(
-                presetGroup,
+                stereoPairGroup,
                 "Axis angle",
                 -180,
                 180,
@@ -161,7 +161,7 @@ export function createCameraPanel({
             );
 
             createSelect(
-                presetGroup,
+                stereoPairGroup,
                 "Scene",
                 scenes.map(
                     scene => ({
@@ -176,15 +176,15 @@ export function createCameraPanel({
                 ),
                 value => {
                     stereo.sceneId = Number(value);
-                    // console.log("Selected scene ID for stereo preset:", stereo.sceneId);
+                    // console.log("Selected scene ID for stereo pair:", stereo.sceneId);
                 },
                 renderScene,
                 rebuildGui
             );
 
             createButton(
-                presetGroup,
-                "Delete preset",
+                stereoPairGroup,
+                "Delete stereo pair",
                 () => {
 
                     const idx =
@@ -213,30 +213,21 @@ export function createCameraPanel({
 
         createButton(
             stereoGroup,
-            "Add preset",
+            "Add stereo pair",
             () => {
 
-                const newPreset = {
-
-                    id:
-                        nextStereoIdRef.value++,
-
-                    name:
-                        `Preset ${
-                            controls.stereoPairs.length + 1
-                        }`,
-
-                    // eyeSeparation:
-                    //     meanIPD,
-
-                    angle: 0
+                const newStereoPair = {
+                    id: nextStereoIdRef.value++,
+                    name: `Interocular axis @0°`,
+                    angle: 0,
+                    sceneId: scenes[0]?.id
                 };
 
                 controls.stereoPairs
-                    .push(newPreset);
+                    .push(newStereoPair);
 
                 controls.selectedStereoPairId =
-                    newPreset.id;
+                    newStereoPair.id;
 
                 rebuildGui();
                 renderScene();
@@ -443,5 +434,17 @@ export function createCameraPanel({
             renderScene,
             rebuildGui
         );
+
+        createSwitch(
+            stereoGroup,
+            "Debug",
+            controls.debug,
+            value => {
+                controls.debug = value;
+            },
+            renderScene,
+            rebuildGui
+        );
+
     }
 }
