@@ -535,7 +535,7 @@ function createObjectDefaults(kind) {
             rectWidth: 0.1,
             rectHeight: 0.05,
             text: "Hello",
-            font: "bold 64px sans-serif",
+            font: "bold 640px sans-serif",
             material: "phong",
             color: "#ffffff"
         }

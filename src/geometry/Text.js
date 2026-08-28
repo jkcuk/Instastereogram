@@ -45,17 +45,44 @@ export class Text {
         // const scale = 2000; // pixels per unit (tune this)
         // const w = Math.ceil(this.width * scale);
         // const h = Math.ceil(this.height * scale);
-        const w = Math.ceil(metrics.width) + 10;
-        const h = Math.ceil(metrics.actualBoundingBoxAscent +
-            metrics.actualBoundingBoxDescent) + 10;
+        // const w = Math.ceil(metrics.width) + 10;
+        // const h = Math.ceil(metrics.actualBoundingBoxAscent +
+        //     metrics.actualBoundingBoxDescent) + 10;
+        // canvas.width = w;
+        // canvas.height = h;
+        // // ctx.font = `bold ${h * 0.8}px sans-serif`;
+        // ctx.font = font;
+        // ctx.fillStyle = "#ffffff";
+        // ctx.textBaseline = "middle";
+        // ctx.textAlign = "center";
+        // ctx.fillText(text, w / 2, h / 2);
+        const padding = 20;
+
+        const w =
+            Math.ceil(metrics.width) +
+            2 * padding;
+
+        const h =
+            Math.ceil(
+                metrics.actualBoundingBoxAscent +
+                metrics.actualBoundingBoxDescent
+            ) +
+            2 * padding;
+
         canvas.width = w;
         canvas.height = h;
-        // ctx.font = `bold ${h * 0.8}px sans-serif`;
+
         ctx.font = font;
         ctx.fillStyle = "#ffffff";
-        ctx.textBaseline = "middle";
+        ctx.textBaseline = "alphabetic";
         ctx.textAlign = "center";
-        ctx.fillText(text, w / 2, h / 2);
+
+        ctx.fillText(
+            text,
+            w / 2,
+            padding +
+            metrics.actualBoundingBoxAscent
+        );
         const img = ctx.getImageData(0, 0, w, h);
         // Extract alpha channel
         const alpha = new Uint8ClampedArray(w * h);
