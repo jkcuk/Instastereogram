@@ -631,6 +631,19 @@ function rebuildGui() {
     const panelLeft =
         existing?.style.left;
 
+    const sectionStates =
+        new Map();
+
+    existing?.querySelectorAll(
+        ".gui-content details"
+    ).forEach(section => {
+        const title =
+            section.querySelector(":scope > summary")?.textContent;
+
+        if (title)
+            sectionStates.set(title, section.open);
+    });
+
     if (existing) {
         existing.remove();
     }
@@ -650,6 +663,16 @@ function rebuildGui() {
 
         if (panelLeft)
             newPanel.style.left = panelLeft;
+
+        newPanel.querySelectorAll(
+            ".gui-content details"
+        ).forEach(section => {
+            const title =
+                section.querySelector(":scope > summary")?.textContent;
+
+            if (title && sectionStates.has(title))
+                section.open = sectionStates.get(title);
+        });
     }
 
     if (newContent) {
@@ -819,6 +842,8 @@ const persistence =
             nextObjectId =
                 ids.nextObjectId;
         },
+
+        sceneManager,
 
         rebuildGui,
         renderScene

@@ -100,6 +100,14 @@ export function createSlider(
 
     function setValue(v, notify = false) {
 
+        if (!Number.isFinite(v)) {
+            number.value =
+                transform.toDisplay(
+                    Number(range.value)
+                );
+            return;
+        }
+
         const nextValue =
             Math.min(max, Math.max(min, v));
 
@@ -155,8 +163,14 @@ export function createSlider(
                         rawNumber
                     );
 
-                update(value);
-                finish(value);
+                if (Number.isFinite(value)) {
+                    update(value);
+                    finish(value);
+                } else {
+                    setValue(Number(range.value));
+                }
+            } else {
+                setValue(Number(range.value));
             }
         }
     );

@@ -8,6 +8,7 @@ export class ProjectPersistence {
         Vector3,
         getNextIds,
         setNextIds,
+        sceneManager,
         rebuildGui,
         renderScene
     }) {
@@ -16,6 +17,7 @@ export class ProjectPersistence {
         this.Vector3 = Vector3;
         this.getNextIds = getNextIds;
         this.setNextIds = setNextIds;
+        this.sceneManager = sceneManager;
         this.rebuildGui = rebuildGui;
         this.renderScene = renderScene;
     }
@@ -97,6 +99,13 @@ export class ProjectPersistence {
                 }
             );
 
+        if (
+            !Array.isArray(data.scenes)
+            || data.scenes.length === 0
+        ) {
+            throw new Error("The project must contain at least one scene.");
+        }
+
         Object.assign(
             this.controls,
             data.controls
@@ -104,6 +113,13 @@ export class ProjectPersistence {
 
         this.scenes.length = 0;
         this.scenes.push(...data.scenes);
+
+        this.sceneManager.selectScene(
+            Math.min(
+                this.sceneManager.currentSceneIndex,
+                this.scenes.length - 1
+            )
+        );
 
         this.setNextIds({
             nextStereoId:
@@ -137,9 +153,11 @@ export class ProjectPersistence {
                     return;
                 }
 
-                await this.loadFromFile(
-                    file
-                );
+                try {
+                    await this.loadFromFile(file);
+                } catch (error) {
+                    alert(`Unable to load project: ${error.message}`);
+                }
             }
         );
 

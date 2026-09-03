@@ -30,7 +30,10 @@ export function createGuiWindow({
         "10";
 
     panel.style.width =
-        "330px";
+        "min(330px, calc(100vw - 24px))";
+
+    panel.style.boxSizing =
+        "border-box";
 
     panel.style.maxHeight =
         "calc(100vh - 24px)";
@@ -124,6 +127,11 @@ export function createGuiWindow({
 
     panel.append(
         header
+    );
+
+    panel.addEventListener(
+        "toggle",
+        () => onToggleCollapsed?.(!panel.open)
     );
 
     const contentWrapper =
