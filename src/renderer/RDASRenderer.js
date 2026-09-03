@@ -15,9 +15,9 @@ export class RDASRenderer {
     dots = 0;
     maxClans = 20000; // Maximum number of clans (i.e. parent dots) to be drawn
     dotSigma = 1; // Gaussian width of Gaussian-shaped dots
-    fadeFactor = 0.9;
+    nextGenerationBrightnessFactor = 0.9;
     minBrightness = 0.2;
-    alreadyThereThreshold = 250; // threshold for determining if a dot is already there (in the range [0, 1])
+    dotSuppressionThreshold = 1; // threshold for determining if a dot is already there (in the range [0, 1])
     debug = false;
 
     n = 0;
@@ -110,10 +110,10 @@ export class RDASRenderer {
         if (
             this.screen.getRGBComponent(screenHit.h, screenHit.v, rgbComponentIndex) 
             >=
-            255*brightness*this.alreadyThereThreshold
+            255*brightness*this.dotSuppressionThreshold
             //this.alreadyThereThreshold // 255*this.minBrightness
         ) {
-            if(this.debug) console.log("Skipping bairn dot at ("+this.screen.h2i(screenHit.h)+", "+this.screen.v2j(screenHit.v)+") because there is already a dot there (brightness "+this.screen.getRGBComponent(screenHit.h, screenHit.v, rgbComponentIndex)+" >= "+255*brightness*this.alreadyThereThreshold+")");
+            if(this.debug) console.log("Skipping bairn dot at ("+this.screen.h2i(screenHit.h)+", "+this.screen.v2j(screenHit.v)+") because there is already a dot there (brightness "+this.screen.getRGBComponent(screenHit.h, screenHit.v, rgbComponentIndex)+" >= "+255*brightness*this.dotSuppressionThreshold+")");
             return; // There is already a dot there (brightness > this.alreadyThereThreshold), so skip this bairn dot
         }
         // Draw the bairn dot at the calculated position
@@ -123,7 +123,7 @@ export class RDASRenderer {
         this.addFamilyDots(
             screenHit.p, // position of parent dot
             rgbComponentIndex, // red = 0, green = 1, blue = 2 
-            brightness * this.fadeFactor, 
+            brightness * this.nextGenerationBrightnessFactor, 
             iIOD, // index of interocular-axis direction
             iCamera, // index of camera that corresponds to interocular-axis direction #iIOD; 0 or 1
             scene, // array of scenes; need at least one per interocular-axis direction
@@ -163,7 +163,7 @@ export class RDASRenderer {
             this.addFamilyDots(
                 this.screen.hv2World(h, v), // position of parent dot
                 rgbComponentIndex, // red = 0, green = 1, blue = 2 
-                brightness * this.fadeFactor, // initial brightness
+                brightness * this.nextGenerationBrightnessFactor, // initial brightness
                 -1, // -1 means no bairns excluded
                 -1, // -1 means no bairns excluded
                 scene, 1 // current recursion depth

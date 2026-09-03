@@ -153,9 +153,9 @@ export class RendererManager {
         renderer.maxDots = controls.rdasMaxDots;
         renderer.maxClans = controls.rdasMaxClans;
         renderer.maxRecursionDepth = controls.rdasMaxRecursionDepth;
-        renderer.fadeFactor = controls.rdasFadeFactor;
+        renderer.nextGenerationBrightnessFactor = controls.rdasNextGenerationBrightnessFactor;
         renderer.minBrightness = controls.rdasMinBrightness;
-        renderer.alreadyThereThreshold = controls.rdasAlreadyThereThreshold;
+        renderer.dotSuppressionThreshold = controls.rdasDotSuppressionThreshold;
         renderer.debug = controls.debug;
 
         renderer.render( scenes );

@@ -83,9 +83,9 @@ const controls = {
     rdasMaxDots: 1000000,
     rdasMaxClans: 500,
     rdasMaxRecursionDepth: 200,
-    rdasFadeFactor: 0.95,
+    rdasNextGenerationBrightnessFactor: 0.95,
     rdasMinBrightness: 0.2,
-    rdasAlreadyThereThreshold: 0.8
+    rdasDotSuppressionThreshold: 0.8
 };
 let guiCollapsed = false;
 const camera =

@@ -137,9 +137,7 @@ export function createCameraPanel({
                 -180,
                 180,
                 1,
-                stereo.angle *
-                180 /
-                Math.PI,
+                stereo.angle * 180 / Math.PI,
                 value => {
 
                     stereo.angle =
@@ -383,10 +381,10 @@ export function createCameraPanel({
             0,
             1,
             0.01,
-            controls.rdasFadeFactor,
+            controls.rdasNextGenerationBrightnessFactor,
             value => {
 
-                controls.rdasFadeFactor =
+                controls.rdasNextGenerationBrightnessFactor =
                     value;
             },
             renderScene
@@ -409,14 +407,14 @@ export function createCameraPanel({
 
         createSlider(
             stereoGroup,
-            "Existing dot threshold",
+            "Dot suppression threshold",
             0,
             1,  // 255,
             0.01,
-            controls.rdasAlreadyThereThreshold,
+            controls.rdasDotSuppressionThreshold,
             value => {
 
-                controls.rdasAlreadyThereThreshold =
+                controls.rdasDotSuppressionThreshold =
                     value;
             },
             renderScene
@@ -424,7 +422,7 @@ export function createCameraPanel({
 
         createSwitch(
             stereoGroup,
-            "Multi-angle SIRDS",
+            "N-Epipolar-Directions Stereogram (NEDS)",
             controls.useAllStereoPairs,
             value => {
 
