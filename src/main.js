@@ -10,7 +10,7 @@ import { createScenePanel } from "./ui/ScenePanel.js";
 import { createObjectPanel } from "./ui/ObjectPanel.js";
 import { createGuiWindow } from "./ui/GuiWindow.js";
 import { ProjectPersistence } from "./persistence/ProjectPersistence.js";
-import { createSlider, createButton, createSmallButton, createSelect, createSwitch, createSection } from "./ui/elements.js"
+import { createSlider, createButton, createSmallButton, createSelect, createSwitch, createSection, setFormFieldIdentity } from "./ui/elements.js"
 const canvas = document.getElementById("canvas");
 canvas.style.touchAction = "none";
 
@@ -394,6 +394,7 @@ function createColorPicker(parent, label, value, onChange) {
     title.textContent = label;
     title.style.minWidth = "80px";
     const input = document.createElement("input");
+    setFormFieldIdentity(input, label);
     input.type = "color";
     input.value = value;
     input.style.flex = "1";
@@ -413,6 +414,7 @@ function createTextInput(parent, label, value, onChange) {
     const title = document.createElement("span");
     title.textContent = label;
     const input = document.createElement("input");
+    setFormFieldIdentity(input, label);
     input.type = "text";
     input.value = value;
     input.addEventListener("change", () => {

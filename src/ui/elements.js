@@ -50,6 +50,21 @@
 //     parent.appendChild(wrapper);
 // }
 
+let nextFormFieldId = 1;
+
+export function setFormFieldIdentity(element, label) {
+    const suffix = nextFormFieldId++;
+    const baseName = label
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "") || "field";
+    const id = `${baseName}-${suffix}`;
+
+    element.id = id;
+    element.name = id;
+    return element;
+}
+
 export function createSlider(
     parent,
     label,
@@ -75,6 +90,7 @@ export function createSlider(
     title.style.minWidth = "40px";
 
     const range = document.createElement("input");
+    setFormFieldIdentity(range, `${label}-range`);
     range.type = "range";
     range.min = String(min);
     range.max = String(max);
@@ -83,6 +99,7 @@ export function createSlider(
     range.style.flex = "0 0 60px";
 
     const number = document.createElement("input");
+    setFormFieldIdentity(number, `${label}-value`);
     number.type = "number";
     number.style.flex = "0 0 60px";
 
@@ -229,6 +246,7 @@ export function createSelect(parent, label, options, value, onChange, render, re
     title.textContent = label;
     title.style.minWidth = "80px";
     const select = document.createElement("select");
+    setFormFieldIdentity(select, label);
     select.style.flex = "1";
     for (const opt of options) {
         const o = document.createElement("option");
@@ -257,6 +275,7 @@ export function createNewObjectSelect(parent, label, defaultText, options, value
     title.textContent = label;
     title.style.minWidth = "80px";
     const select = document.createElement("select");
+    setFormFieldIdentity(select, label);
     select.style.flex = "1";
     // Default option
     const placeholder = document.createElement("option");
@@ -300,6 +319,7 @@ export function createSwitch(parent, label, value, onChange, render, rebuild) {
     const title = document.createElement("span");
     title.textContent = label;
     const input = document.createElement("input");
+    setFormFieldIdentity(input, label);
     input.type = "checkbox";
     input.checked = value;
     input.addEventListener("change", () => {

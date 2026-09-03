@@ -139,6 +139,9 @@ export class ProjectPersistence {
         const input =
             document.createElement("input");
 
+        input.id = "project-file";
+        input.name = "project-file";
+
         input.type = "file";
         input.accept = ".json";
 
