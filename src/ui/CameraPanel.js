@@ -433,6 +433,17 @@ export function createCameraPanel({
             rebuildGui
         );
 
+        createSwitch(
+            stereoGroup,
+            "φ Animation",
+            controls.phiAnimation,
+            value => {
+                controls.phiAnimation = value;
+            },
+            renderScene,
+            rebuildGui
+        );
+
         // createSwitch(
         //     stereoGroup,
         //     "Debug",

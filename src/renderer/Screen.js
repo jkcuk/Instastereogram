@@ -56,6 +56,7 @@ export class Screen {
             .add(this.hHalfAxis.mul(h))
             .add(this.vHalfAxis.mul(v));
     }
+
     placeDot(h, v, color) {
         const index = this.hv2index(h, v);
         this.image.data[index] = Math.round(Math.max(0, Math.min(1, color[0])) * 255);
@@ -63,6 +64,30 @@ export class Screen {
         this.image.data[index + 2] = Math.round(Math.max(0, Math.min(1, color[2])) * 255);
         this.image.data[index + 3] = 255; // alpha channel
     }
+
+    placeDisc(
+        h, v, 
+        rgbComponentIndex, // 0 for red, 1 for green, 2 for blue
+        brightness, // in the range [0, 1]
+        radius  // in pixel units
+    ) {
+        this.ctx.beginPath();
+
+        this.ctx.arc(
+            this.h2i(h),
+            this.v2j(v),
+            radius,
+            0,
+            2 * Math.PI
+        );
+
+        const rgb = [0, 0, 0];
+        rgb[rgbComponentIndex] = Math.round(brightness * 255);
+        this.ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},255)`;
+
+        this.ctx.fill();
+    }
+
     placeGaussianDot(
         h, v, 
         rgbComponentIndex, // 0 for red, 1 for green, 2 for blue

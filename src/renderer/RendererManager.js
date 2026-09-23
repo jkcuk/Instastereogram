@@ -11,8 +11,7 @@ export class RendererManager {
         canvas,
         ctx,
         scenes,
-        getSelectedStereo,
-        meanIPD
+        getSelectedStereo
     }) {
 
         const hw =
@@ -157,6 +156,7 @@ export class RendererManager {
         renderer.minBrightness = controls.rdasMinBrightness;
         renderer.dotSuppressionThreshold = controls.rdasDotSuppressionThreshold;
         renderer.debug = controls.debug;
+        renderer.phiAnimation = controls.phiAnimation;
 
         renderer.render( scenes );
     }

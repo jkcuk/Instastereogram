@@ -17,10 +17,6 @@ export class Rectangle {
      */
     constructor(center, hAxis, vAxis, width, height, material) {
         this.center = center;
-        this.hAxis = hAxis;
-        this.vAxis = vAxis;
-        this.width = width;
-        this.height = height;
         this.material = material;
         this.hAxis = hAxis.normalize();
         this.vAxis = vAxis.normalize();

@@ -944,8 +944,23 @@ export function createScenePanel({
         },
 
         {
+            label: "Cuboid",
+            value: "cuboid"
+        },
+
+        {
+            label: "Disc",
+            value: "disc"
+        },
+
+        {
             label: "Parallelogram",
             value: "parallelogram"
+        },
+
+        {
+            label: "Rectangle",
+            value: "rectangle"
         },
 
         {

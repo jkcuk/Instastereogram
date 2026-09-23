@@ -53,14 +53,14 @@ export function createObjectPanel({
         -0.2,
         0.2,
         0.001,
-        object.position.x,
+        object.position?.x ?? 0,
         value => {
 
             object.position =
                 new Vector3(
                     value,
-                    object.position.y,
-                    object.position.z
+                    object.position?.y ?? 0,
+                    object.position?.z ?? -0.1
                 );
         },
         renderScene
@@ -72,14 +72,14 @@ export function createObjectPanel({
         -0.2,
         0.2,
         0.001,
-        object.position.y,
+        object.position?.y ?? 0,
         value => {
 
             object.position =
                 new Vector3(
-                    object.position.x,
+                    object.position?.x ?? 0,
                     value,
-                    object.position.z
+                    object.position?.z ?? -0.1
                 );
         },
         renderScene
@@ -91,20 +91,24 @@ export function createObjectPanel({
         -1,
         -0.01,
         0.001,
-        object.position.z,
+        object.position?.z ?? -0.1,
         value => {
 
             object.position =
                 new Vector3(
-                    object.position.x,
-                    object.position.y,
+                    object.position?.x ?? 0,
+                    object.position?.y ?? 0,
                     value
                 );
         },
         renderScene
     );
 
-    if (object.kind === "sphere") {
+    if (
+        object.kind === "sphere"
+        ||
+        object.kind === "disc"
+    ) {
 
         createSlider(
             editor,
@@ -256,7 +260,11 @@ export function createObjectPanel({
         );
     }
 
-    if (object.kind === "plane") {
+    if (
+        object.kind === "plane"
+        ||
+        object.kind === "disc"
+    ) {
 
         createSlider(
             editor,
@@ -316,7 +324,11 @@ export function createObjectPanel({
         );
     }
 
-    if (object.kind === "parallelogram") {
+    if (
+        object.kind === "parallelogram"
+        ||
+        object.kind === "rectangle"
+    ) {
 
         createSlider(
             editor,
@@ -431,6 +443,70 @@ export function createObjectPanel({
             },
             renderScene
         );
+    }
+
+    if (object.kind === "rectangle") {
+
+        createSlider(
+            editor,
+            "Width",
+            0.01,
+            1,
+            0.01,
+            object.width ?? 0.1,
+            value => {
+
+                object.width =
+                    value;
+            },
+            renderScene
+        );
+
+        createSlider(
+            editor,
+            "Height",
+            0.01,
+            1,
+            0.01,
+            object.height ?? 0.1,
+            value => {
+
+                object.height =
+                    value;
+            },
+            renderScene
+        );
+    }
+
+    if (object.kind === "cuboid") {
+
+        for (const corner of ["min", "max"]) {
+
+            for (const component of ["x", "y", "z"]) {
+
+                createSlider(
+                    editor,
+                    `${corner} ${component}`,
+                    -1,
+                    1,
+                    0.01,
+                    object[corner]?.[component] ?? 0,
+                    value => {
+
+                        object[corner] =
+                            new Vector3(
+                                object[corner]?.x ?? 0,
+                                object[corner]?.y ?? 0,
+                                object[corner]?.z ?? 0
+                            );
+
+                        object[corner][component] =
+                            value;
+                    },
+                    renderScene
+                );
+            }
+        }
     }
 
     if (object.kind === "text") {

@@ -79,6 +79,7 @@ const controls = {
     ],
     selectedStereoPairId: 1,
     useAllStereoPairs: false,
+    phiAnimation: false,
     rdasDotSigma: 1.5, // in pixel units
     rdasMaxDots: 1000000,
     rdasMaxClans: 500,
@@ -350,19 +351,18 @@ function renderScene() {
         canvas,
         ctx,
         scenes:
-                (controls.renderer === "rds" && controls.useAllStereoPairs)
-                ? controls.stereoPairs.map(stereo => {
-                    const scene = scenes.find(s => s.id === stereo.sceneId);
-                    return buildScene(scene);
-                })
-                : [
-                    buildScene(
-                        sceneManager
-                            .getCurrentScene()
-                    )
-                ],
-        getSelectedStereo,
-        meanIPD
+            (controls.renderer === "rds" && controls.useAllStereoPairs)
+            ? controls.stereoPairs.map(stereo => {
+                const scene = scenes.find(s => s.id === stereo.sceneId);
+                return buildScene(scene);
+            })
+            : [
+                buildScene(
+                    sceneManager
+                        .getCurrentScene()
+                )
+            ],
+        getSelectedStereo
     });
 }
 
@@ -491,6 +491,27 @@ function createObjectDefaults(kind) {
             material: "phong",
             ior: 1.5
         },
+        cuboid: {
+            id: nextObjectId++,
+            kind: "cuboid",
+            name: "Cuboid",
+            open: true,
+            min: new Vector3(-0.05, -0.05, -0.15),
+            max: new Vector3(0.05, 0.05, -0.05),
+            material: "phong",
+            color: "#d9d9d9"
+        },
+        disc: {
+            id: nextObjectId++,
+            kind: "disc",
+            name: "Disc",
+            open: true,
+            position: new Vector3(0, 0, -0.1),
+            normal: new Vector3(0, 0, 1),
+            radius: 0.05,
+            material: "phong",
+            color: "#d9d9d9"
+        },
         parallelogram: {
             id: nextObjectId++,
             kind: "parallelogram",
@@ -502,6 +523,19 @@ function createObjectDefaults(kind) {
             material: "phong",
             color: "#d9d9d9",
             ior: 1.5
+        },
+        rectangle: {
+            id: nextObjectId++,
+            kind: "rectangle",
+            name: "Rectangle",
+            open: true,
+            position: new Vector3(0, 0, -0.1),
+            hAxis: new Vector3(1, 0, 0),
+            vAxis: new Vector3(0, 1, 0),
+            width: 0.1,
+            height: 0.1,
+            material: "phong",
+            color: "#d9d9d9"
         },
         plane: {
             id: nextObjectId++,
@@ -546,12 +580,26 @@ function createObjectDefaults(kind) {
     const def = defaults[kind];
     return {
         ...def,
-        position: new Vector3(def.position.x, def.position.y, def.position.z),
+        position: def.position
+            ? new Vector3(def.position.x, def.position.y, def.position.z)
+            : undefined,
         axis: def.axis
             ? new Vector3(def.axis.x, def.axis.y, def.axis.z)
             : undefined,
         normal: def.normal
             ? new Vector3(def.normal.x, def.normal.y, def.normal.z)
+            : undefined,
+        min: def.min
+            ? new Vector3(def.min.x, def.min.y, def.min.z)
+            : undefined,
+        max: def.max
+            ? new Vector3(def.max.x, def.max.y, def.max.z)
+            : undefined,
+        hAxis: def.hAxis
+            ? new Vector3(def.hAxis.x, def.hAxis.y, def.hAxis.z)
+            : undefined,
+        vAxis: def.vAxis
+            ? new Vector3(def.vAxis.x, def.vAxis.y, def.vAxis.z)
             : undefined
     };
 }

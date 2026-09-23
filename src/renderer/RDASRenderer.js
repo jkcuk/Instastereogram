@@ -19,6 +19,7 @@ export class RDASRenderer {
     minBrightness = 0.2;
     dotSuppressionThreshold = 1; // threshold for determining if a dot is already there (in the range [0, 1])
     debug = false;
+    phiAnimation = false;
 
     n = 0;
     m = 0;
@@ -119,6 +120,7 @@ export class RDASRenderer {
         // Draw the bairn dot at the calculated position
         // this.screen.placeGaussianDot(screenHit.h, screenHit.v, colour);
         this.screen.placeGaussianDot(screenHit.h, screenHit.v, rgbComponentIndex, brightness, this.dotSigma);
+        // this.screen.placeDisc(screenHit.h, screenHit.v, rgbComponentIndex, brightness, this.dotSigma);
         this.dots++;
         this.addFamilyDots(
             screenHit.p, // position of parent dot
@@ -155,6 +157,7 @@ export class RDASRenderer {
             const brightness = 1; // in the range [0, 1]
             // this.screen.placeGaussianDot(h, v, color, this.dotSigma);
             this.screen.placeGaussianDot(h, v, rgbComponentIndex, brightness, this.dotSigma);
+            // this.screen.placeDisc(h, v, rgbComponentIndex, brightness, this.dotSigma);
             // this.screen.placeGaussianDot(h, v, color);
             if(this.debug) {
                 this.n = 0;

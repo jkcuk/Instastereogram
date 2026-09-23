@@ -5,6 +5,9 @@ import { Cylinder } from "../geometry/Cylinder.js";
 import { Cone } from "../geometry/Cone.js";
 import { Plane } from "../geometry/Plane.js";
 import { Parallelogram } from "../geometry/Parallelogram.js";
+import { Cuboid } from "../geometry/Cuboid.js";
+import { Disc } from "../geometry/Disc.js";
+import { Rectangle } from "../geometry/Rectangle.js";
 import { Text } from "../geometry/Text.js";
 
 import { Vector3 } from "../core/Vector3.js";
@@ -127,6 +130,51 @@ export function buildScene(sceneData) {
                     object.radius ?? 0.1,
                     material,
                     object.length ?? 0.1
+                )
+            );
+
+            continue;
+        }
+
+        if (object.kind === "cuboid") {
+
+            builtScene.add(
+                new Cuboid(
+                    object.min ??
+                    new Vector3(-0.05, -0.05, -0.15),
+                    object.max ??
+                    new Vector3(0.05, 0.05, -0.05),
+                    material
+                )
+            );
+
+            continue;
+        }
+
+        if (object.kind === "disc") {
+
+            builtScene.add(
+                new Disc(
+                    object.position,
+                    object.normal ?? new Vector3(0, 0, 1),
+                    object.radius ?? 0.05,
+                    material
+                )
+            );
+
+            continue;
+        }
+
+        if (object.kind === "rectangle") {
+
+            builtScene.add(
+                new Rectangle(
+                    object.position,
+                    object.hAxis ?? new Vector3(1, 0, 0),
+                    object.vAxis ?? new Vector3(0, 1, 0),
+                    object.width ?? 0.1,
+                    object.height ?? 0.1,
+                    material
                 )
             );
 
