@@ -1,7 +1,7 @@
 import { Vector3 } from "../core/Vector3.js"
 import { Rectangle } from "../geometry/Rectangle.js"
 import { Colour } from "../materials/Colour.js"
-import { Screen } from "../renderer/Screen.js"
+import { Screen } from "../screen/Screen.js"
 import { Ray } from "../core/Ray.js"
 // Render the scene twice, once from a left-eye camera and once from a
 // right-eye camera, then combine the two results into a red/cyan anaglyph.

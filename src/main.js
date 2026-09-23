@@ -14,6 +14,8 @@ import { createSlider, createButton, createSmallButton, createSelect, createSwit
 const canvas = document.getElementById("canvas");
 canvas.style.touchAction = "none";
 
+let ctx = canvas.getContext("2d");
+
 function rotateVector(v, axis, angle) {
 
     const c = Math.cos(angle);
@@ -23,8 +25,6 @@ function rotateVector(v, axis, angle) {
         .add(axis.cross(v).mul(s))
         .add(axis.mul(axis.dot(v) * (1 - c)));
 }
-
-let ctx = canvas.getContext("2d");
 
 let nextStereoId = 1;
 const nextStereoIdRef = {
@@ -348,7 +348,7 @@ function renderScene() {
     rendererManager.render({
         camera,
         controls,
-        canvas,
+        // canvas,
         ctx,
         scenes:
             (controls.renderer === "rds" && controls.useAllStereoPairs)

@@ -1,5 +1,7 @@
-// A planar screen described by its center point and two half-axes that define
-// its size and orientation in world space.
+// The screen rectangle, defined by its center point and two half-axes.
+// It holds an image that can then be displayed on the screen, and has methods
+// for converting between screen coordinates and world-space coordinates and for
+// drawing on the screen image.
 export class Screen {
     center;
     hHalfAxis;

@@ -1,14 +1,14 @@
 import { Renderer } from "./Renderer.js";
 import { AnaglyphRenderer } from "./AnaglyphRenderer.js";
 import { RDASRenderer } from "./RDASRenderer.js";
-import { Screen } from "./Screen.js";
+import { Screen } from "../screen/Screen.js";
 
 export class RendererManager {
 
     render({
         camera,
         controls,
-        canvas,
+        // canvas,
         ctx,
         scenes,
         getSelectedStereo
@@ -19,16 +19,16 @@ export class RendererManager {
 
         const hh =
             hw *
-            canvas.height /
-            canvas.width;
+            ctx.canvas.height /
+            ctx.canvas.width;
 
         const screen =
             new Screen(
                 camera.centre,
                 camera.u.mul(hw),
                 camera.v.mul(hh),
-                canvas.width,
-                canvas.height,
+                ctx.canvas.width,
+                ctx.canvas.height,
                 ctx
             );
 
@@ -48,8 +48,8 @@ export class RendererManager {
 
             renderer.render(
                 ctx,
-                canvas.width,
-                canvas.height,
+                ctx.canvas.width,
+                ctx.canvas.height,
                 scenes[0]
             );
 
@@ -110,8 +110,8 @@ export class RendererManager {
 
             renderer.render(
                 ctx,
-                canvas.width,
-                canvas.height,
+                ctx.canvas.width,
+                ctx.canvas.height,
                 scenes[0]
             );
 
