@@ -129,9 +129,13 @@ export function createGuiWindow({
         header
     );
 
-    panel.addEventListener(
-        "toggle",
-        () => onToggleCollapsed?.(!panel.open)
+    header.addEventListener(
+        "click",
+        () => {
+            requestAnimationFrame(
+                () => onToggleCollapsed?.(!panel.open)
+            );
+        }
     );
 
     const contentWrapper =

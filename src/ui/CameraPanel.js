@@ -435,7 +435,7 @@ export function createCameraPanel({
 
         createSwitch(
             stereoGroup,
-            "φ Animation",
+            "Phi Animation",
             controls.phiAnimation,
             value => {
                 controls.phiAnimation = value;
