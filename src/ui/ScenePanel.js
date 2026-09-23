@@ -2,7 +2,8 @@ import {
     createButton,
     createSmallButton,
     createSelect,
-    createSection
+    createSection,
+    setFormFieldIdentity
 }
 from "./elements.js";
 
@@ -270,6 +271,11 @@ export function createScenePanel({
                     document.createElement(
                         "input"
                     );
+
+                setFormFieldIdentity(
+                    input,
+                    "scene-name"
+                );
 
                 input.type =
                     "text";
@@ -632,6 +638,11 @@ export function createScenePanel({
                         "input"
                     );
 
+                setFormFieldIdentity(
+                    input,
+                    "object-name"
+                );
+
                 input.type =
                     "text";
 
@@ -927,6 +938,11 @@ export function createScenePanel({
         document.createElement(
             "select"
         );
+
+    setFormFieldIdentity(
+        select,
+        "new-object-kind"
+    );
 
     select.style.flex =
         "1";
