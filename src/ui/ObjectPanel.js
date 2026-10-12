@@ -572,7 +572,7 @@ export function createObjectPanel({
         );
     }
 
-    if (controls.phiAnimation) {
+    if (controls.renderer === "rds" && controls.phiAnimation) {
         const derivativeSection = createSection(
             editor,
             "Geometric parameter rates",

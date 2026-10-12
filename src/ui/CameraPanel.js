@@ -86,7 +86,7 @@ export function createCameraPanel({
             renderScene
         );
 
-        if (controls.phiAnimation) {
+        if (controls.renderer === "rds" && controls.phiAnimation) {
             controls.derivatives ??= {};
             controls.derivatives.ipd ??= 0;
             createNumberInput(
@@ -169,7 +169,7 @@ export function createCameraPanel({
                 }
             );
 
-            if (controls.phiAnimation) {
+            if (controls.renderer === "rds" && controls.phiAnimation) {
                 stereo.derivatives ??= {};
                 stereo.derivatives.angle ??= 0;
                 createNumberInput(
@@ -274,7 +274,7 @@ export function createCameraPanel({
         renderScene
     );
 
-    if (controls.phiAnimation) {
+    if (controls.renderer === "rds" && controls.phiAnimation) {
         controls.derivatives ??= {};
         controls.derivatives.screenDistance ??= 0;
         createNumberInput(
