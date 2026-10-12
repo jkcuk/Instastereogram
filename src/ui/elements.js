@@ -213,6 +213,41 @@ export function createSlider(
     };
 }
 
+export function createNumberInput(parent, label, value, onChange) {
+    const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.gap = "6px";
+    wrapper.style.alignItems = "center";
+    wrapper.style.color = "#e8eef7";
+    wrapper.style.font = "12px sans-serif";
+
+    const title = document.createElement("span");
+    title.textContent = label;
+    title.style.minWidth = "80px";
+
+    const input = document.createElement("input");
+    setFormFieldIdentity(input, label);
+    input.type = "number";
+    input.step = "any";
+    input.value = String(value);
+    input.style.flex = "1";
+    let currentValue = value;
+    input.addEventListener("change", () => {
+        const nextValue = Number(input.value);
+        if (Number.isFinite(nextValue)) {
+            currentValue = nextValue;
+            onChange(nextValue);
+        } else {
+            input.value = String(currentValue);
+        }
+    });
+
+    wrapper.append(title, input);
+    parent.appendChild(wrapper);
+
+    return input;
+}
+
 export function createButton(parent, label, onClick) {
     const button = document.createElement("button");
     button.textContent = label;

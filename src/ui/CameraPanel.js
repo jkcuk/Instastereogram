@@ -1,6 +1,7 @@
 import {
     createSlider,
     createButton,
+    createNumberInput,
     createSelect,
     createSwitch,
     createSection
@@ -85,6 +86,20 @@ export function createCameraPanel({
             renderScene
         );
 
+        if (controls.phiAnimation) {
+            controls.derivatives ??= {};
+            controls.derivatives.ipd ??= 0;
+            createNumberInput(
+                stereoGroup,
+                "d(Eye separation)/dt (m/s)",
+                controls.derivatives.ipd,
+                value => {
+                    controls.derivatives.ipd = value;
+                    renderScene();
+                }
+            );
+        }
+
         createSelect(
             stereoGroup,
             "Stereo pair",
@@ -139,11 +154,8 @@ export function createCameraPanel({
                 1,
                 stereo.angle * 180 / Math.PI,
                 value => {
-
                     stereo.angle =
-                        value *
-                        Math.PI /
-                        180;
+                        Math.round(value * Math.PI / 180);
                     
                     stereo.name =
                         `Interocular axis @ ${Math.round(value)}°`; 
@@ -151,12 +163,25 @@ export function createCameraPanel({
                 renderScene,
                 undefined,
                 () => {
-
                     requestAnimationFrame(
                         () => rebuildGui()
                     );
                 }
             );
+
+            if (controls.phiAnimation) {
+                stereo.derivatives ??= {};
+                stereo.derivatives.angle ??= 0;
+                createNumberInput(
+                    stereoPairGroup,
+                    "d(Axis angle)/dt (rad/s)",
+                    stereo.derivatives.angle,
+                    value => {
+                        stereo.derivatives.angle = value;
+                        renderScene();
+                    }
+                );
+            }
 
             createSelect(
                 stereoPairGroup,
@@ -218,6 +243,7 @@ export function createCameraPanel({
                     id: nextStereoIdRef.value++,
                     name: `Interocular axis @0°`,
                     angle: 0,
+                    derivatives: { angle: 0 },
                     sceneId: scenes[0]?.id
                 };
 
@@ -247,6 +273,30 @@ export function createCameraPanel({
         },
         renderScene
     );
+
+    if (controls.phiAnimation) {
+        controls.derivatives ??= {};
+        controls.derivatives.screenDistance ??= 0;
+        createNumberInput(
+            stereoGroup,
+            "d(Screen distance)/dt (m/s)",
+            controls.derivatives.screenDistance,
+            value => {
+                controls.derivatives.screenDistance = value;
+                renderScene();
+            }
+        );
+        controls.derivatives.screenWidth ??= 0;
+        createNumberInput(
+            stereoGroup,
+            "d(Screen width)/dt (m/s)",
+            controls.derivatives.screenWidth,
+            value => {
+                controls.derivatives.screenWidth = value;
+                renderScene();
+            }
+        );
+    }
 
     // createSlider(
     //     stereoGroup,

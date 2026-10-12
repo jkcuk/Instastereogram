@@ -45,6 +45,11 @@ const controls = {
     debug: false,
     screenDistance: 0.5,
     screenWidth: 0.16, // 16cm wide screen
+    derivatives: {
+        screenDistance: 0,
+        screenWidth: 0,
+        ipd: 0
+    },
     renderer: "standard",
     ipd: meanIPD,
     stereoPairs: [
@@ -53,6 +58,7 @@ const controls = {
             name: "Interocular axis @" + anglesDeg[0] + "°",
             // eyeSeparation: meanIPD,
             angle: anglesDeg[0] * Math.PI / 180, // angle w.r.t. horizontal
+            derivatives: { angle: 0 },
             sceneId: 1
         },
         {
@@ -60,6 +66,7 @@ const controls = {
             name: "Interocular axis @" + anglesDeg[1] + "°",
             // eyeSeparation: meanIPD,
             angle: anglesDeg[1] * Math.PI / 180, // angle w.r.t. horizontal
+            derivatives: { angle: 0 },
             sceneId: 2
         },
         {
@@ -67,6 +74,7 @@ const controls = {
             name: "Interocular axis @" + anglesDeg[2] + "°",
             // eyeSeparation: meanIPD,
             angle: anglesDeg[2] * Math.PI / 180, // angle w.r.t. horizontal
+            derivatives: { angle: 0 },
             sceneId: 3
         },
         {
@@ -74,6 +82,7 @@ const controls = {
             name: "Interocular axis @" + anglesDeg[3] + "°",
             // eyeSeparation: meanIPD,
             angle: anglesDeg[3] * Math.PI / 180, // angle w.r.t. horizontal
+            derivatives: { angle: 0 },
             sceneId: 4
         }
     ],
@@ -999,6 +1008,7 @@ function createGui() {
         sceneManager,
         renderScene,
         rebuildGui,
+        controls,
         Vector3,
         createTextInput,
         createColorPicker

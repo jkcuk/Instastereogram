@@ -1,5 +1,6 @@
 import {
     createSlider,
+    createNumberInput,
     createSelect,
     createSection
 }
@@ -14,6 +15,8 @@ export function createObjectPanel({
     renderScene,
 
     rebuildGui,
+
+    controls,
 
     Vector3,
 
@@ -567,6 +570,109 @@ export function createObjectPanel({
             },
             renderScene
         );
+    }
+
+    if (controls.phiAnimation) {
+        const derivativeSection = createSection(
+            editor,
+            "Geometric parameter rates",
+            true
+        );
+        const derivatives = object.derivatives ??= {};
+        const parameters = [];
+
+        function addVectorRates(property, label, components = ["x", "y", "z"], unit = "1/s") {
+            derivatives[property] ??= {};
+            for (const component of components) {
+                derivatives[property][component] ??= 0;
+                parameters.push({
+                    label: `${label} ${component}`,
+                    unit,
+                    get value() {
+                        return derivatives[property][component];
+                    },
+                    set value(value) {
+                        derivatives[property][component] = value;
+                    }
+                });
+            }
+        }
+
+        function addScalarRate(property, label, unit) {
+            derivatives[property] ??= 0;
+            parameters.push({
+                key: property,
+                label,
+                unit,
+                get value() {
+                    return derivatives[property];
+                },
+                set value(value) {
+                    derivatives[property] = value;
+                }
+            });
+        }
+
+        if (object.kind !== "cuboid") {
+            addVectorRates("position", "Position", ["x", "y", "z"], "m/s");
+        }
+
+        if (object.kind === "cylinder" || object.kind === "cone") {
+            addVectorRates("axis", "Axis");
+        }
+
+        if (object.kind === "plane" || object.kind === "disc") {
+            addVectorRates("normal", "Normal");
+        }
+
+        if (
+            object.kind === "parallelogram"
+            || object.kind === "rectangle"
+            || object.kind === "text"
+        ) {
+            addVectorRates("hAxis", "Horizontal axis");
+            addVectorRates("vAxis", "Vertical axis");
+        }
+
+        if (object.kind === "cuboid") {
+            addVectorRates("min", "Minimum", ["x", "y", "z"], "m/s");
+            addVectorRates("max", "Maximum", ["x", "y", "z"], "m/s");
+        }
+
+        if (["sphere", "disc", "cylinder", "cone"].includes(object.kind)) {
+            addScalarRate("radius", "Radius", "m/s");
+        }
+
+        if (object.kind === "cylinder") {
+            addScalarRate("length", "Length", "m/s");
+        }
+
+        if (object.kind === "cone") {
+            addScalarRate("angle", "Angle", "rad/s");
+            addScalarRate("coneHeight", "Height", "m/s");
+        }
+
+        if (object.kind === "rectangle") {
+            addScalarRate("width", "Width", "m/s");
+            addScalarRate("height", "Height", "m/s");
+        }
+
+        if (object.kind === "text") {
+            addScalarRate("rectWidth", "Width", "m/s");
+            addScalarRate("rectHeight", "Height", "m/s");
+        }
+
+        for (const parameter of parameters) {
+            createNumberInput(
+                derivativeSection,
+                `d(${parameter.label})/dt (${parameter.unit})`,
+                parameter.value,
+                value => {
+                    parameter.value = value;
+                    renderScene();
+                }
+            );
+        }
     }
 
     createSelect(
